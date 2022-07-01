@@ -1,129 +1,117 @@
-function typeFinder(collection) {
-    if (collection instanceof Array) {
-        return collection.slice()
-            //return copy [...collection]
-    } else {
-        return Object.values(collection)
-            //converts an objects values to an array
+function myEach(collection, callback) {
+    let currentCollection = [...collection]
+    if (collection instanceof Array === false) {
+        currentCollection = Object.values(collection)
     }
-}
-
-
-function myEach(collection, alert) {
-    let typeSearch = typeFinder(collection)
-
-    for (const element of typeSearch) {
-        alert(element)
-
+    for (let i = 0; i < currentCollection.length; i++) {
+        callback(currentCollection[i])
     }
-
     return collection
-};
-
-
-
-const myMap = (collection, callback) => {
-    let typeSearch = typeFinder(collection)
-
-    let updatedMap = []
-    for (const item of typeSearch) {
-        updatedMap.push(callback(item))
-    }
-    return updatedMap
-
 }
-myMap(collection, callback)
 
+function myMap(collection, callback) {
+    let currentCollection = [...collection]
+    if (collection instanceof Array === false) {
+        currentCollection = Object.values(collection)
+    }
+    const newCollection = []
+    for (let i = 0; i < currentCollection.length; i++) {
+        const newItem = callback(currentCollection[i])
+        newCollection.push(newItem)
+    }
+    return newCollection
+}
 
-function myReduce(collection, callback, accumulate) {
-    let typeSearch = typeFinder(collection)
-
-    if (accumulate) {
-        let i = 0;
-
+function myReduce(collection, callback, acc) {
+    let currentCollection = [...collection]
+    if (collection instanceof Array === false) {
+        currentCollection = Object.values(collection)
+    }
+    let current = acc
+    if (typeof acc !== "number") {
+        current = currentCollection[0]
+        for (let i = 1; i < currentCollection.length; i++) {
+            current = callback(current, currentCollection[i], currentCollection)
+        }
     } else {
-        let i = 1;
-
-        accumulate = collection[0]
+        for (let i = 0; i < currentCollection.length; i++) {
+            current = callback(current, currentCollection[i], currentCollection)
+        }
     }
-    for (i; i < collection.length; i++) {
-        callback(typeSearch)
-        return typeSearch
-
-    }
+    return current
 }
-
-
-//return a single value
-
-
 
 function myFind(collection, predicate) {
-    let typeSearch = typeFinder(collection)
-
-    for (const item of typeSearch) {
-        if (item.value === 1) {
-            return item.value;
-
-        } else {
-            return undefined
+    let currentCollection = [...collection]
+    if (collection instanceof Array === false) {
+        currentCollection = Object.values(collection)
+    }
+    for (let i = 0; i < currentCollection.length; i++) {
+        if (predicate(currentCollection[i])) {
+            return currentCollection[i]
         }
     }
-
+    return undefined
 }
-
-
 
 function myFilter(collection, predicate) {
-    let typeSearch = typeFinder(collection)
-
-    for (const item of typeSearch) {
-        if (item.value) {
-            return item.value;
-        } else {
-            return [];
+    let currentCollection = [...collection]
+    if (collection instanceof Array === false) {
+        currentCollection = Object.values(collection)
+    }
+    const newCollection = []
+    for (let i = 0; i < currentCollection.length; i++) {
+        if (predicate(currentCollection[i])) {
+            newCollection.push(currentCollection[i])
         }
     }
-
+    return newCollection
 }
-
 
 function mySize(collection) {
-    let typeSearch = typeFinder(collection)
-
-    return typeSearch.length
+    let currentCollection = [...collection]
+    if (collection instanceof Array === false) {
+        currentCollection = Object.values(collection)
+    }
+    return currentCollection.length
 }
 
-function myFirst(collection, n) {
-    let typeSearch = typeFinder(collection)
-        // array.slice( where_to_start_deleting, array.length )
-
-    let sliced = parseInt(typeSearch.slice(0, n));
-
-
-    return sliced
+function myFirst(array, n) {
+    if (typeof n !== "number") {
+        return array[0]
+    } else {
+        let newArray = []
+        for (let i = 0; i < n; i++) {
+            newArray.push(array[i])
+        }
+        return newArray
+    }
 }
 
-// const myFirst = function(arr, stop=false) {
-//     return (stop) ? arr.slice(0, stop) : arr[0];
-//   }
-
-function myLast(collection, n) {
-    let typeSearch = typeFinder(collection)
-
-    let nReturn = parseInt(typeSearch.slice(3, typeSearch.length))
-
-    return nReturn;
+function myLast(array, n) {
+    if (typeof n !== "number") {
+        return array[array.length - 1]
+    } else {
+        let newArray = []
+        for (let i = 1; i <= n; i++) {
+            newArray.unshift(array[array.length - i])
+        }
+        return newArray
+    }
 }
 
-function myKeys(collection) {
-    let typeSearch = typeFinder(collection)
-
-    return Object.keys(collection)
+function myKeys(object) {
+    const arrayOfKeys = []
+    for (let key in object) {
+        arrayOfKeys.push(key)
+    }
+    return arrayOfKeys
 }
 
-function myValues(collection) {
-    let typeSearch = typeFinder(collection)
-
-    return Object.values(collection)
+function myValues(object) {
+    const arrayOfValues = []
+    for (let key in object) {
+        arrayOfValues.push(object[key])
+    }
+    return arrayOfValues
 }
